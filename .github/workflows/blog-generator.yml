@@ -1,0 +1,209 @@
+name: Weekly Blog Generator
+
+on:
+  schedule:
+    # Every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  generate-blog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate blog post from GitHub activity
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USERNAME: teplrguy
+        run: |
+          node << 'SCRIPT'
+          const https = require('https');
+          const fs = require('fs');
+          const path = require('path');
+
+          const USERNAME = process.env.GH_USERNAME;
+          const TOKEN = process.env.GITHUB_TOKEN;
+
+          function fetchJSON(url) {
+            return new Promise((resolve, reject) => {
+              const options = {
+                headers: {
+                  'User-Agent': 'blog-generator',
+                  'Authorization': `Bearer ${TOKEN}`,
+                  'Accept': 'application/vnd.github.v3+json',
+                },
+              };
+              https.get(url, options, (res) => {
+                let data = '';
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => {
+                  if (res.statusCode >= 200 && res.statusCode < 300) {
+                    resolve(JSON.parse(data));
+                  } else {
+                    reject(new Error(`HTTP ${res.statusCode}: ${data.slice(0, 200)}`));
+                  }
+                });
+              }).on('error', reject);
+            });
+          }
+
+          async function main() {
+            const now = new Date();
+            const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+
+            console.log(`Fetching events for ${USERNAME} since ${weekAgo.toISOString()}`);
+
+            // Fetch public events
+            let events = [];
+            try {
+              events = await fetchJSON(
+                `https://api.github.com/users/${USERNAME}/events/public?per_page=100`
+              );
+            } catch (e) {
+              console.log('Could not fetch events:', e.message);
+            }
+
+            // Filter to past week
+            const recentEvents = events.filter(e => new Date(e.created_at) >= weekAgo);
+
+            if (recentEvents.length === 0) {
+              console.log('No events this week, skipping blog generation.');
+              process.exit(0);
+            }
+
+            // Categorize events
+            const pushes = recentEvents.filter(e => e.type === 'PushEvent');
+            const prs = recentEvents.filter(e => e.type === 'PullRequestEvent');
+            const creates = recentEvents.filter(e => e.type === 'CreateEvent');
+            const repos = [...new Set(recentEvents.map(e => e.repo?.name).filter(Boolean))];
+
+            // Build blog post (template-based, no AI dependency)
+            const dateStr = now.toISOString().slice(0, 10);
+            const weekStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const slug = `week-of-${dateStr}`;
+
+            let content = `<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Week of ${weekStr} — Gilbert Appiah</title>
+            <style>
+              body { font-family: 'Inter', sans-serif; background: #0d1117; color: #e6edf3; max-width: 700px; margin: 0 auto; padding: 2rem; line-height: 1.7; }
+              a { color: #58a6ff; }
+              h1 { color: #8b5cf6; font-size: 1.5rem; }
+              h2 { color: #58a6ff; font-size: 1.1rem; margin-top: 1.5rem; }
+              .meta { color: #8b949e; font-size: 0.85rem; margin-bottom: 2rem; }
+              .back { margin-bottom: 1rem; display: block; font-size: 0.85rem; color: #8b949e; }
+              ul { padding-left: 1.2rem; }
+              li { margin-bottom: 0.4rem; color: #8b949e; }
+              code { font-family: 'JetBrains Mono', monospace; background: #161b22; padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.85rem; }
+            </style>
+          </head>
+          <body>
+            <a href="../" class="back">&larr; All Posts</a>
+            <h1>Week of ${weekStr}</h1>
+            <div class="meta">Auto-generated from GitHub activity</div>
+          `;
+
+            content += `<p>This week I was active across <strong>${repos.length}</strong> repositories with <strong>${recentEvents.length}</strong> total events.</p>`;
+
+            if (pushes.length > 0) {
+              content += `<h2>Commits</h2><ul>`;
+              const commitRepos = [...new Set(pushes.map(e => e.repo?.name).filter(Boolean))];
+              commitRepos.forEach(repo => {
+                const count = pushes.filter(e => e.repo?.name === repo).length;
+                const shortName = repo.split('/').pop();
+                content += `<li><code>${shortName}</code> — ${count} push${count > 1 ? 'es' : ''}</li>`;
+              });
+              content += `</ul>`;
+            }
+
+            if (prs.length > 0) {
+              content += `<h2>Pull Requests</h2><ul>`;
+              prs.forEach(e => {
+                const pr = e.payload?.pull_request;
+                if (pr) {
+                  const title = (pr.title || 'Untitled').replace(/</g, '&lt;');
+                  content += `<li>${e.payload.action}: <strong>${title}</strong> in <code>${e.repo.name.split('/').pop()}</code></li>`;
+                }
+              });
+              content += `</ul>`;
+            }
+
+            if (creates.length > 0) {
+              content += `<h2>New Repositories & Branches</h2><ul>`;
+              creates.forEach(e => {
+                const ref = e.payload?.ref_type || 'resource';
+                const name = e.payload?.ref || e.repo?.name?.split('/').pop() || '';
+                content += `<li>Created ${ref}: <code>${name.replace(/</g, '&lt;')}</code></li>`;
+              });
+              content += `</ul>`;
+            }
+
+            content += `<h2>Active Repositories</h2><ul>`;
+            repos.forEach(repo => {
+              const shortName = repo.split('/').pop();
+              content += `<li><a href="https://github.com/${encodeURIComponent(repo)}" target="_blank" rel="noopener">${shortName}</a></li>`;
+            });
+            content += `</ul>`;
+
+            content += `</body></html>`;
+
+            // Write post file
+            const postsDir = path.join('blog', 'posts');
+            if (!fs.existsSync(postsDir)) fs.mkdirSync(postsDir, { recursive: true });
+
+            const filename = `${slug}.html`;
+            fs.writeFileSync(path.join(postsDir, filename), content);
+            console.log(`Wrote post: ${filename}`);
+
+            // Update index.json
+            const indexPath = path.join(postsDir, 'index.json');
+            let index = [];
+            if (fs.existsSync(indexPath)) {
+              try { index = JSON.parse(fs.readFileSync(indexPath, 'utf8')); } catch {}
+            }
+
+            // Remove existing entry for same week
+            index = index.filter(p => p.file !== filename);
+
+            index.push({
+              file: filename,
+              title: `Week of ${weekStr}`,
+              date: dateStr,
+              excerpt: `Activity across ${repos.length} repositories with ${recentEvents.length} events including ${pushes.length} pushes and ${prs.length} pull requests.`,
+              tags: repos.map(r => r.split('/').pop()).slice(0, 5),
+            });
+
+            fs.writeFileSync(indexPath, JSON.stringify(index, null, 2));
+            console.log('Updated index.json');
+          }
+
+          main().catch(err => {
+            console.error('Blog generation failed:', err.message);
+            process.exit(1);
+          });
+          SCRIPT
+
+      - name: Commit and push blog post
+        run: |
+          git config user.name "Blog Generator"
+          git config user.email "actions@github.com"
+          git add blog/posts/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "blog: auto-generated weekly summary [skip ci]"
+            git push
+          fi

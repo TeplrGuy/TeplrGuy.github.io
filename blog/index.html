@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Gilbert Appiah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117; --surface: #161b22; --border: #30363d;
+      --text: #e6edf3; --muted: #8b949e; --purple: #8b5cf6;
+      --blue: #58a6ff; --green: #2ea043;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .blog-header {
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      display: flex; justify-content: space-between; align-items: center;
+      max-width: 900px; margin: 0 auto;
+    }
+    .blog-header h1 { font-size: 1.3rem; }
+    .blog-header h1 span { color: var(--purple); }
+    .back-link { font-size: 0.85rem; color: var(--muted); }
+
+    .blog-container { max-width: 900px; margin: 2rem auto; padding: 0 2rem; }
+    .blog-intro { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+    .post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      transition: border-color 0.2s;
+    }
+    .post-card:hover { border-color: var(--purple); }
+    .post-card h2 { font-size: 1.1rem; margin-bottom: 0.4rem; }
+    .post-card h2 a { color: var(--text); }
+    .post-card .post-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.6rem; }
+    .post-card .post-excerpt { font-size: 0.88rem; color: var(--muted); line-height: 1.5; }
+    .post-card .post-tags { margin-top: 0.8rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .post-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      background: rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 4px;
+      color: var(--purple);
+    }
+
+    .empty-state {
+      text-align: center; padding: 4rem 2rem; color: var(--muted);
+    }
+    .empty-state p { margin-top: 0.5rem; font-size: 0.9rem; }
+    .empty-state .emoji { font-size: 2.5rem; margin-bottom: 1rem; }
+
+    @media (max-width: 600px) {
+      .blog-header { padding: 1rem; }
+      .blog-container { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="blog-header">
+    <h1><span>~/</span>blog</h1>
+    <a href="../" class="back-link">&larr; Back to Resume</a>
+  </header>
+
+  <main class="blog-container">
+    <p class="blog-intro">
+      Auto-generated weekly summaries of my GitHub activity — powered by GitHub Actions.
+    </p>
+    <div id="posts-container">
+      <div class="empty-state">
+        <div class="emoji">📝</div>
+        <p><strong>No posts yet</strong></p>
+        <p>Blog posts are auto-generated from my GitHub activity every Monday.</p>
+        <p>Check back soon or <a href="https://github.com/teplrguy" target="_blank">follow me on GitHub</a>.</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Load posts from posts/index.json if it exists
+    (async function() {
+      try {
+        const res = await fetch('posts/index.json');
+        if (!res.ok) return;
+        const posts = await res.json();
+        if (!posts.length) return;
+
+        const container = document.getElementById('posts-container');
+        container.innerHTML = '';
+
+        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        posts.forEach(post => {
+          const card = document.createElement('div');
+          card.className = 'post-card';
+          const tags = (post.tags || []).map(t =>
+            '<span class="post-tag">' + t.replace(/</g, '&lt;') + '</span>'
+          ).join('');
+
+          card.innerHTML =
+            '<h2><a href="posts/' + encodeURIComponent(post.file) + '">' +
+            post.title.replace(/</g, '&lt;') + '</a></h2>' +
+            '<div class="post-meta">' + new Date(post.date).toLocaleDateString('en-US', {
+              year: 'numeric', month: 'long', day: 'numeric'
+            }) + '</div>' +
+            '<div class="post-excerpt">' + (post.excerpt || '').replace(/</g, '&lt;') + '</div>' +
+            (tags ? '<div class="post-tags">' + tags + '</div>' : '');
+
+          container.appendChild(card);
+        });
+      } catch {
+        // No posts yet — empty state stays visible
+      }
+    })();
+  </script>
+</body>
+</html>
