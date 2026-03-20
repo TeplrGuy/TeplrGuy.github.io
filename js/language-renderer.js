@@ -70,6 +70,16 @@ ${certsYaml}
     awards:
 ${data.awards.map(a => `    - "${a}"`).join('\n')}
 
+    # Startups & Projects — Earlier career tools
+    startups:
+${data.startupsAndProjects.map(sp => {
+      const toolName = sp.title.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/_+$/, '');
+      return `      - name: "${toolName}"
+        description: "${sp.title} at ${sp.company}"
+        period: "${sp.period}"
+        capabilities:\n` + sp.achievements.map(a => `          - "${a}"`).join('\n');
+    }).join('\n\n')}
+
     # Runtime Configuration
     settings:
       maxConcurrency: "unlimited"
@@ -175,6 +185,23 @@ ${data.certifications.map(c => `            "${c}",`).join('\n')}
 ${data.awards.map(a => `            "${a}",`).join('\n')}
         ]
 
+    # ── Startups & Projects ────────────────────────────────────────
+    @property
+    def startups(self) -> list[Experience]:
+        return [
+${data.startupsAndProjects.map(sp => {
+      const achStr = sp.achievements.map(a => `                "${a}",`).join('\n');
+      return `        Experience(
+            company="${sp.company}",
+            title="${sp.title}",
+            period="${sp.period}",
+            achievements=[
+${achStr}
+            ],
+        ),`;
+    }).join('\n')}
+        ]
+
     # ── Entry Point ──────────────────────────────────────────────────
     def hire(self) -> str:
         return f"Let's build something great together → {self.EMAIL}"
@@ -267,6 +294,24 @@ ${data.awards.map(a => `            "${a}"`).join(',\n')}
         );
     }
 
+    // ── Startups & Projects ─────────────────────────────────────────
+    @Override
+    public List<Experience> getStartupsAndProjects() {
+        return List.of(
+${data.startupsAndProjects.map(sp => {
+      const achStr = sp.achievements.map(a => `                    "${a}"`).join(',\n');
+      return `            new Experience.Builder()
+                .company("${sp.company}")
+                .title("${sp.title}")
+                .period("${sp.period}")
+                .achievements(List.of(
+${achStr}
+                ))
+                .build()`;
+    }).join(',\n\n')}
+        );
+    }
+
     // ── Main ────────────────────────────────────────────────────────
     public static void main(String[] args) {
         var gilbert = new GilbertAppiah();
@@ -347,6 +392,24 @@ ${data.certifications.map(c => `        "${c}",`).join('\n')}
     public IReadOnlyList<string> Awards => new[]
     {
 ${data.awards.map(a => `        "${a}",`).join('\n')}
+    };
+
+    // ── Startups & Projects ──────────────────────────────────────────
+    public IReadOnlyList<Experience> StartupsAndProjects => new List<Experience>
+    {
+${data.startupsAndProjects.map(sp => {
+      const achStr = sp.achievements.map(a => `                    "${a}",`).join('\n');
+      return `            new()
+            {
+                Company = "${sp.company}",
+                Title = "${sp.title}",
+                Period = "${sp.period}",
+                Achievements =
+                {
+${achStr}
+                }
+            },`;
+    }).join('\n\n')}
     };
 
     // ── Entry Point ─────────────────────────────────────────────────
@@ -473,6 +536,23 @@ ${data.awards.map(a => `      "${a}",`).join('\n')}
     ];
   }
 
+  // ── Startups & Projects ───────────────────────────────────────
+  get startupsAndProjects(): readonly IExperience[] {
+    return [
+${data.startupsAndProjects.map(sp => {
+      const achStr = sp.achievements.map(a => `      "${a}",`).join('\n');
+      return `    {
+      company: "${sp.company}",
+      title: "${sp.title}",
+      period: "${sp.period}",
+      achievements: [
+${achStr}
+      ],
+    },`;
+    }).join('\n\n')}
+    ] as const;
+  }
+
   // ── Hire ──────────────────────────────────────────────────────
   async hire(): Promise<string> {
     return \`Let's build something great → \${this.name}\`;
@@ -527,6 +607,16 @@ ${data.education.map(e => `**${e.degree}** — ${e.institution}`).join('\n')}
 ## Certifications
 
 ${data.certifications.map(c => `- ${c}`).join('\n')}
+
+---
+
+## Startups & Projects
+
+${data.startupsAndProjects.map(sp => {
+      return `### ${sp.company} — ${sp.title}\n` +
+             `*${sp.period}*\n\n` +
+             sp.achievements.map(a => `- ${a}`).join('\n');
+    }).join('\n\n')}
 
 ## Awards
 

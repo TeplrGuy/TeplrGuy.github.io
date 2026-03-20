@@ -48,9 +48,10 @@ const RESUME = {
       startYear: 2022,
       achievements: [
         "Cloud Solution Architecture: Designed and implemented cloud-native applications for S500 customers using microservices and containerization (Docker, Azure Compute, Kubernetes).",
+        "Customer Enablement: Engaged with customers, partners, and account teams to understand business needs and design solutions leveraging Microsoft Cloud.",
         "Production Excellence: Maintained a 98% resolution rate within SLA for critical customer workloads, ensuring high availability and reliability.",
         "Efficiency at Scale: Optimized Azure code deployments and service configurations, resulting in a 40% reduction in deployment time.",
-        "Technical Evangelism: Conducted 100+ architectural workshops to enhance customer technical maturity and unlock value in the Microsoft Cloud.",
+        "Technical Evangelism: Conducted 100+ workshops and custom deliveries to enhance customer technical maturity, driving increased Azure consumption across organizations.",
         "Leadership: Delivered several multi-million dollar engineering and support contracts for proactive/reactive engagements."
       ]
     },
@@ -62,6 +63,7 @@ const RESUME = {
       achievements: [
         "Critical Systems Support: Resolved 200+ high-severity production issues with a 98% customer satisfaction rate.",
         "Deployment Optimization: Assisted customers with complex code deployments to Azure, reducing deployment-related failures by 25%.",
+        "Container Engineering: Configured customer applications to run on containers, enhancing application scalability and portability.",
         "Team Leadership: Mentored colleagues on deep-tier troubleshooting, improving team-wide resolution times by 30%."
       ]
     },
@@ -71,9 +73,47 @@ const RESUME = {
       period: "May 2019 – Jun 2020",
       startYear: 2019,
       achievements: [
-        "Production Reliability: Owned Identity Management services for a major financial application, ensuring 99.9% uptime.",
-        "Secure API Design: Built resilient REST APIs using Java, Spring Boot, and OAuth/JWT, improving feature delivery time by 25%.",
-        "CI/CD Engineering: Implemented Jenkins pipelines that reduced production deployment errors by 30%, avoiding downtime while accelerating time to production."
+        "Feature Delivery: Designed and prototyped client features and major initiatives on-site, improving feature delivery time by 25%.",
+        "Production Reliability: Owned Identity Management services for the client's application, ensuring 99.9% uptime.",
+        "Secure API Design: Built resilient REST APIs using Java, Spring Boot, Spring Security, OAuth, and JWT.",
+        "CI/CD Engineering: Implemented Jenkins pipelines for primary CI/CD, reducing deployment errors by 30%.",
+        "Serverless Architecture: Created serverless Lambda functions and JWT authorizers, enhancing system scalability."
+      ]
+    }
+  ],
+
+  // Startups & earlier projects (from PDF resume)
+  startupsAndProjects: [
+    {
+      company: "Regulur Inc",
+      title: "iOS Developer",
+      period: "May 2018 – Jan 2019",
+      startYear: 2018,
+      achievements: [
+        "Simplified application codebase by refactoring and minimizing storyboard usage, reducing code complexity by 40%.",
+        "Implemented multi-threaded processes with memory management, resulting in 20% performance improvements.",
+        "Built with Swift, Xcode, and CodeIgniter backend; deployed first version to the iOS App Store."
+      ]
+    },
+    {
+      company: "US Naval Undersea Warfare Center",
+      title: "Software Engineer",
+      period: "Sep 2017 – May 2018",
+      startYear: 2017,
+      achievements: [
+        "Designed a Windows OS system to synchronize MIDI and audio devices for theatrical productions using C# and XAML.",
+        "Built a theatrical lighting management system achieving zero defects during development.",
+        "Ensured quality via Visual Studio MSTest; utilized agile and scrum methodologies throughout the development lifecycle."
+      ]
+    },
+    {
+      company: "Teplr",
+      title: "Co-Founder / Full Stack Developer",
+      period: "Jul 2015 – Dec 2017",
+      startYear: 2015,
+      achievements: [
+        "Founded a social media app and led a team of 4 developers, achieving 1,000 sign-ups for test flight.",
+        "Managed private server setup, RESTful API development, and CI/CD deployment pipeline."
       ]
     }
   ],
@@ -97,7 +137,8 @@ const RESUME = {
       "GitHub",
       "Azure DevOps",
       "Azure (App Service, Functions, Logic Apps)",
-      "CI/CD (GitHub Actions, ADO)",
+      "AWS (Lambda, S3)",
+      "CI/CD (GitHub Actions, ADO, Jenkins)",
       "Docker",
       "Kubernetes"
     ],
@@ -105,11 +146,13 @@ const RESUME = {
       "C#/.NET",
       "Java (Spring Boot)",
       "Python",
-      "JavaScript",
+      "JavaScript/Node.js",
       "React.js",
       "Swift",
+      "Django REST Framework",
       "TDD",
-      "SDD"
+      "SDD",
+      "REST API Design"
     ]
   },
 
@@ -122,7 +165,9 @@ const RESUME = {
 
   certifications: [
     "Microsoft Certified: Azure Developer Associate (AZ-204)",
-    "Microsoft Certified: Azure Fundamentals (AZ-900)"
+    "Microsoft Certified: Azure Fundamentals (AZ-900)",
+    "Azure App Service Development (Nov 2020)",
+    "Azure App Service OSS (Sep 2020)"
   ],
 
   awards: [

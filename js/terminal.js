@@ -235,6 +235,19 @@ const ResumeTerminal = {
         });
         this.term.writeln('');
       });
+
+      if (!args || !args.includes('--current')) {
+        this.term.writeln('\x1b[1;38;5;220m  Startups & Projects\x1b[0m');
+        this.term.writeln('\x1b[38;5;243m  ─────────────────────────────────────────────\x1b[0m');
+        RESUME.startupsAndProjects.forEach(sp => {
+          this.term.writeln(`\x1b[1;38;5;75m  ${sp.company}\x1b[0m — \x1b[38;5;141m${sp.title}\x1b[0m`);
+          this.term.writeln(`\x1b[38;5;243m  ${sp.period}\x1b[0m`);
+          sp.achievements.forEach(a => {
+            this.term.writeln(`\x1b[38;5;114m    ▸\x1b[0m ${a}`);
+          });
+          this.term.writeln('');
+        });
+      }
     },
 
     skills(args) {
@@ -350,7 +363,10 @@ const ResumeTerminal = {
         { hash: 'i7j8k9l', date: '2022-03', msg: 'feat: promoted to Sr. Cloud Solution Architect', tag: null },
         { hash: 'm0n1o2p', date: '2020-06', msg: 'feat: joined Microsoft as Azure Escalation Engineer', tag: null },
         { hash: 'q3r4s5t', date: '2019-05', msg: 'feat: Architect/Full-Stack at Ally Financial', tag: null },
-        { hash: 'u6v7w8x', date: '2018-05', msg: 'init: B.S. Computer Science — UMass Dartmouth', tag: 'v1.0.0' },
+        { hash: 'y9z0a1b', date: '2019-01', msg: 'feat: iOS Developer at Regulur Inc', tag: null },
+        { hash: 'c2d3e4f', date: '2018-05', msg: 'feat: Software Engineer at US Naval Undersea Warfare Center', tag: null },
+        { hash: 'g5h6i7j', date: '2017-07', msg: 'feat: co-founded Teplr — mobile development', tag: null },
+        { hash: 'u6v7w8x', date: '2015-05', msg: 'init: B.S. Computer Science — UMass Dartmouth', tag: 'v1.0.0' },
       ];
 
       commits.forEach(c => {
