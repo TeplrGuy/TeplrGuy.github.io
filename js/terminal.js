@@ -11,13 +11,13 @@ const ResumeTerminal = {
   history: [],
   historyIndex: -1,
 
-  ASCII_ART: `\x1b[38;5;141m
-   ██████╗  █████╗ 
-  ██╔════╝ ██╔══██╗
-  ██║  ███╗███████║
-  ██║   ██║██╔══██║
-  ╚██████╔╝██║  ██║
-   ╚═════╝ ╚═╝  ╚═╝\x1b[0m`,
+  ASCII_ART: [
+    '\x1b[38;5;141m   ____    _  \x1b[0m',
+    '\x1b[38;5;141m  / ___|  / \\ \x1b[0m',
+    '\x1b[38;5;141m | |  _  / _ \\\x1b[0m',
+    '\x1b[38;5;141m | |_| |/ ___ \\\x1b[0m',
+    '\x1b[38;5;141m  \\____/_/   \\_\\\x1b[0m',
+  ],
 
   WELCOME: `\x1b[38;5;243m──────────────────────────────────────────────────────\x1b[0m
 \x1b[1;38;5;141m  Gilbert Appiah\x1b[0m — \x1b[38;5;114mResume Agent v2025.1\x1b[0m
@@ -52,6 +52,7 @@ const ResumeTerminal = {
       lineHeight: 1.4,
       cursorBlink: true,
       cursorStyle: 'bar',
+      convertEol: true,
       allowProposedApi: true,
     });
 
@@ -65,8 +66,9 @@ const ResumeTerminal = {
     if (this.fitAddon) this.fitAddon.fit();
 
     // Welcome
-    this.term.writeln(this.ASCII_ART);
-    this.term.writeln(this.WELCOME);
+    this.ASCII_ART.forEach(l => this.term.writeln(l));
+    this.term.writeln('');
+    this.WELCOME.split('\n').forEach(l => this.term.writeln(l));
     this.writePrompt();
 
     // Input handling
@@ -342,14 +344,17 @@ const ResumeTerminal = {
         `\x1b[40m  \x1b[41m  \x1b[42m  \x1b[43m  \x1b[44m  \x1b[45m  \x1b[46m  \x1b[47m  \x1b[0m`,
       ];
 
-      const artLines = this.ASCII_ART.split('\n').filter(l => l);
+      const artLines = this.ASCII_ART;
       this.term.writeln('');
 
+      const stripAnsi = s => s.replace(/\x1b\[[0-9;]*m/g, '');
       const maxLines = Math.max(artLines.length, info.length);
       for (let i = 0; i < maxLines; i++) {
-        const artLine = (artLines[i] || '').padEnd(28);
+        const raw = artLines[i] || '';
+        const visible = stripAnsi(raw).length;
+        const padded = raw + ' '.repeat(Math.max(0, 22 - visible));
         const infoLine = info[i] || '';
-        this.term.writeln(`${artLine}  ${infoLine}`);
+        this.term.writeln(`${padded}  ${infoLine}`);
       }
       this.term.writeln('');
     },
