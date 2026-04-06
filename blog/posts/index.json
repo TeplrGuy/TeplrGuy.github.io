@@ -22,5 +22,18 @@
       "skills-for-fabric",
       "Cx-Innovation-Hub-IF-Baseline"
     ]
+  },
+  {
+    "file": "week-of-2026-04-06.html",
+    "title": "Week of April 6, 2026",
+    "date": "2026-04-06",
+    "excerpt": "Activity across 6 repositories with 21 events including 16 pushes and 0 pull requests.",
+    "tags": [
+      "TinyToolTown",
+      "openclaw-windows-node",
+      "ghas-demo-semantic-search",
+      "itext-pdf-service",
+      "Leetcode_company_frequency"
+    ]
   }
 ]
