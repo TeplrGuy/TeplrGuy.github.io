@@ -45,5 +45,18 @@
       "rtk",
       "Contoso-University"
     ]
+  },
+  {
+    "file": "week-of-2026-04-20.html",
+    "title": "Week of April 20, 2026",
+    "date": "2026-04-20",
+    "excerpt": "Activity across 6 repositories with 37 events including 31 pushes and 0 pull requests.",
+    "tags": [
+      "ado-crossproject-intake-guide",
+      "msft-contoso-university.github.io",
+      "database-engineering-with-github-copilot",
+      "CLI-Anything",
+      "Contoso-University"
+    ]
   }
 ]
