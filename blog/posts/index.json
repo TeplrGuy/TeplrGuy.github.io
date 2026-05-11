@@ -79,5 +79,14 @@
       "app-dotnet-azsql-appsvc",
       "app-modernization-session-guide"
     ]
+  },
+  {
+    "file": "week-of-2026-05-11.html",
+    "title": "Week of May 11, 2026",
+    "date": "2026-05-11",
+    "excerpt": "Activity across 1 repositories with 100 events including 0 pushes and 0 pull requests.",
+    "tags": [
+      "app-dotnet-azsql-appsvc"
+    ]
   }
 ]
