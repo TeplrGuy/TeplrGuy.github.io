@@ -97,5 +97,17 @@
     "tags": [
       "ado-crossproject-intake-guide"
     ]
+  },
+  {
+    "file": "week-of-2026-05-25.html",
+    "title": "Week of May 25, 2026",
+    "date": "2026-05-25",
+    "excerpt": "Activity across 4 repositories with 100 events including 21 pushes and 6 pull requests.",
+    "tags": [
+      "p-capacity-widget",
+      "ado-capacity-widget",
+      "wardley-maps-mermaid",
+      "todo-app"
+    ]
   }
 ]
