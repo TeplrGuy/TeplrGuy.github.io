@@ -118,5 +118,16 @@
     "tags": [
       "p-capacity-widget"
     ]
+  },
+  {
+    "file": "week-of-2026-06-08.html",
+    "title": "Week of June 8, 2026",
+    "date": "2026-06-08",
+    "excerpt": "Activity across 3 repositories with 15 events including 12 pushes and 0 pull requests.",
+    "tags": [
+      "Build26-OD851-expand-local-ai-reach-with-windows-ml",
+      "kelley-ade-catalog-demo",
+      "contoso-ade-catalog-demo"
+    ]
   }
 ]
