@@ -142,5 +142,18 @@
       "notifications-service",
       "inventory-service"
     ]
+  },
+  {
+    "file": "week-of-2026-06-29.html",
+    "title": "Week of June 29, 2026",
+    "date": "2026-06-29",
+    "excerpt": "Activity across 6 repositories with 8 events including 0 pushes and 0 pull requests.",
+    "tags": [
+      "orders-service",
+      "shared-contracts",
+      "portal-web",
+      "api-gateway",
+      "inventory-service"
+    ]
   }
 ]
