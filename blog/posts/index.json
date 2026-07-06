@@ -155,5 +155,14 @@
       "api-gateway",
       "inventory-service"
     ]
+  },
+  {
+    "file": "week-of-2026-07-06.html",
+    "title": "Week of July 6, 2026",
+    "date": "2026-07-06",
+    "excerpt": "Activity across 1 repositories with 19 events including 14 pushes and 5 pull requests.",
+    "tags": [
+      "Cx-Innovation-Hub-IF-Baseline"
+    ]
   }
 ]
