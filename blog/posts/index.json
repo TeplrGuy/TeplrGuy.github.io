@@ -191,5 +191,18 @@
     "tags": [
       "MoneyPrinterTurbo"
     ]
+  },
+  {
+    "file": "week-of-2026-10-12.html",
+    "title": "Week of October 12, 2026",
+    "date": "2026-10-12",
+    "excerpt": "Activity across 11 repositories with 30 events including 17 pushes and 0 pull requests.",
+    "tags": [
+      "app-modernization-session-guide",
+      "PhotoAlbum-Java",
+      "PhotoAlbum",
+      "azure-app-hosting-options",
+      "eShopOnWeb"
+    ]
   }
 ]
