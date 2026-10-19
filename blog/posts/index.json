@@ -204,5 +204,16 @@
       "azure-app-hosting-options",
       "eShopOnWeb"
     ]
+  },
+  {
+    "file": "week-of-2026-10-19.html",
+    "title": "Week of October 19, 2026",
+    "date": "2026-10-19",
+    "excerpt": "Activity across 3 repositories with 6 events including 3 pushes and 0 pull requests.",
+    "tags": [
+      "foundry-voice-agents",
+      "mulesoft-to-azure-guide",
+      "SREAgentEnterpriseShowcase"
+    ]
   }
 ]
