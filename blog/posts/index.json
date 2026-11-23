@@ -228,5 +228,18 @@
       "shared-contracts",
       "notifications-service"
     ]
+  },
+  {
+    "file": "week-of-2026-11-23.html",
+    "title": "Week of November 23, 2026",
+    "date": "2026-11-23",
+    "excerpt": "Activity across 8 repositories with 100 events including 71 pushes and 0 pull requests.",
+    "tags": [
+      "copilot-harness-profiler",
+      "harness-profiler",
+      "contoso-engineering",
+      "contoso-platform",
+      "contoso-enrollments"
+    ]
   }
 ]
